@@ -6,16 +6,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mensagem = $_POST['mensagem'] ?? '';
     $servico = $_POST['servico']; // Ex: "Ensaio casal.pdf"
 
-    include 'config/conexao.php'; // garante a conexão com o banco
+    include 'conexao.php'; // garante a conexão com o banco
 
     // Inserir no banco de dados
     $sql = "INSERT INTO orcamento (nome, email, telefone, servico)
             VALUES ('$nome', '$email', '$telefone', '$servico')";
 
     if ($conn->query($sql) === TRUE) {
-        // ✅ Dados gravados com sucesso
+        //  Dados gravados com sucesso
         // Agora prepara o download
-        $caminho_pdf = __DIR__ . "/pdfs/" . basename($servico);
+        $caminho_pdf = __DIR__ . "/" . basename($servico);
 
         if (file_exists($caminho_pdf)) {
             // Limpa o buffer de saída (evita conflito com header)
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             readfile($caminho_pdf);
             exit;
         } else {
-            echo "❌ O arquivo não foi encontrado em: " . htmlspecialchars($caminho_pdf);
+            echo "O arquivo não foi encontrado em: " . htmlspecialchars($caminho_pdf);
         }
     } else {
         echo "Erro ao salvar no banco: " . $conn->error;
